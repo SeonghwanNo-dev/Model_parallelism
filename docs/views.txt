@@ -1,0 +1,7 @@
+Architectural Views
+
+- Contains diagrams and explanatory materials representing various perspectives of the system
+- such as the 4+1 View Model (Logical, Process, Development, Physical Views + Scenarios).
+
+Link
+https://www.canva.com/design/DAG7kazDJos/0aZHctdhK71RM4O3722VHw/edit?utm_content=DAG7kazDJos&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton

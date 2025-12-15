@@ -1,0 +1,30 @@
+Architecture Decision Records
+
+- Rationale
+- Pros and cons
+- Alternatives
+- Added whenever an important decision is made.
+
+# v1: Vanilla version
+- Implement a basic, sequential model parallelism pipeline where the model is split across two GPUs on different nodes.
+- Feature maps are explicitly transferred between them via RAM and IPC.
+
+- Architecture
+1. Connect the two distinct computer nodes via IPC.
+2. Split and load the model into the two GPUs (one half on each).
+3. Load input data onto GPU 1.
+4. After computation on GPU 1, offload the resulting Feature Map to RAM.
+5. Transfer the Feature Map to GPU 2 via IPC.
+6. Load the received Feature Map onto GPU 2.
+7. Perform computation on the loaded data on GPU 2.
+8. Completion of the forward pass.
+
+
+(1) Rationale: This 'Vanilla version' is implemented first to establish a performance baseline. This will allow us to accurately measure the performance gain achieved by more optimized, subsequent versions (e.g., Pipelining).
+(2) Pros
+Scalability: Allows loading and processing models larger than the memory capacity of a single GPU by utilizing multiple GPUs.
+(3) Cons	
+- Low Utilization: Both GPUs cannot compute simultaneously. GPU 1 must wait for GPU 2's backward pass, and vice versa, leading to inefficient resource utilization.
+- Overhead: Significant overhead is introduced by explicitly moving the Feature Map: GPU -> RAM -> IPC -> RAM -> GPU.
+(4) Alternatives Considered: Pipelining
+

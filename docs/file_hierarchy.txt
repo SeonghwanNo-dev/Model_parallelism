@@ -1,0 +1,16 @@
+project_root/
+├── src/                          # Core Source Code (Reusable Modules)
+│   ├── components/               # Component Definitions (IPC, GMM)
+│   │   ├── IPC.cpp               # Inter-Process Communication (C++ implementation)
+│   │   └── ModelPartitioning.py  # General Model Manager (Python implementation)
+│   ├── models/                   # Model Structure Definitions
+│   │   └── my_big_model.py
+│   └── utils.py                  # Helper Functions
+├── scripts/                  	  # Execution Scripts (Entry Points)
+│   ├── run.py        		  # Main script to run
+│   └── cleanup.sh
+├── configs/                      # Configuration Files
+├── data/                         # Datasets
+├── results/                      # Training Outputs (Logs, Checkpoints)
+└── README.md
+

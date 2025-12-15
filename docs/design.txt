@@ -1,0 +1,107 @@
+Detailed Design Documents
+
+- component design.
+- interface definitions.
+- API specifications.
+
+# v1: Vanilla version
+- Component design
+1. IPC (cpp)
+2. Model Partitioning (py)
+
+# 1. IPC (Inter-Process Communication) Component Design Document (cpp)
+
+1. Introduction
+ This document defines the design and specifications for the Inter-Process Communication (IPC) component within the system. The IPC component aims to manage stable connections with other processes (nodes) and provide functionality for sending and receiving data between connected nodes.
+ 
+2. IPC Component Properties
+- connected_nodeNode, type: Object (e.g., IPCNode)
+The currently connected node object. Indicates the connection status.
+- connected_node_addressString (e.g., IP:Port)
+The network address (IP and port number) of the currently connected node.
+
+3. Method Specifications
+  3.1 Node Connection (ConnectNode)
+  This function attempts to establish a network connection between the IPC component and a target node.
+  - Input: Target Node Address (target_address: String)
+  - Output: None
+  - Operation
+  1. An attempt is made to establish a network connection to the node specified by target_address.
+  2. On Success: The connected_node and connected_node_address properties are updated, and the following message is printed.
+  > Output Message (Success): "Connection success, Connected Node is xxxx.xxxx.xxxx.xxxx:xxx"
+  3. On Failure: The properties are not updated, and the following message is printed:> Output Message (Failure): "Connection fail"
+  
+  3.2 Check Current Connection (CheckConnection)
+  This function checks and outputs the information of the node currently connected to the IPC component.
+  - Input: None
+  - Output: None
+  - Operation
+  1. The values of the connected_node and connected_node_address properties are checked.
+  2. If a node is connected: The connected node object information and address are printed.
+  > Output Message (Connected): "Current connected node: [connected_node_object], Address: [connected_node_address]"
+  3. If no node is connected: A no connection status message is printed.
+  > Output Message (No Connection): "No connected node currently."
+
+  3.3 Data Transmission (TransmitData)
+  This function transmits data to the currently connected node.
+  - Input: Data to Transmit (data: Data Type) <- 파이토치에서 정의된 형식, 아마 데이터 로더 관련돼있을거임
+  - Output: None
+  - Operation
+  1. Confirms that the current connected_node is valid.
+  2. Transmits the data to the connected node.
+  3. Upon Data Transmission Completion, the following message is printed.
+  > Output Message (Completion): "Data transmission complete."
+  4. Upon Transmission Failure (e.g., connection loss), a failure message is printed.
+  > Output Message (Failure): "Data transmission failed. Connection may be lost."
+
+# 2. Model Partitioning Component Design Document (py)
+
+1. Introduction
+ This document specifies the design for the Model Partitioning component. This component is designed to encapsulate a single neural network model, providing basic functionality for model initialization, structure introspection, and partitioning (cutting) the model at a specific layer index.
+ 
+2. Model Partitioning Component Properties
+- model, type: Neural Network Model Object
+The single model object currently managed by the component. This property is initially None until a model is loaded.
+
+3. Method Specifications
+  3.1 Load Model (LoadModel)
+  This method initializes the component by setting the internal model property.
+  - Input: input_model (input_model: Original Neural Network Model Object)
+  - Output: None
+  - Operation
+  1. Assigns the input_model to the component's internal model property.
+  2. Output Message: "Model successfully loaded."
+  
+  3.2 Check Model(CheckModel)
+  This method checks whether a model has been successfully loaded into the component.
+  Note: This method is primarily intended for internal component use.
+  - Input: None
+  - Output: Boolean (is_loaded: True if model is not None, False otherwise)
+  - Operation	
+  1. Returns True if the component's internal model property is not None.
+  2. Returns False otherwise.
+
+  3.3 Display Model Structure (DisplayStructure)
+  This method outputs a detailed summary or textual representation of the currently managed model's architecture.
+  - Input: None
+  - Output: None
+  - Operation
+  1. Calls the CheckModel (3.2) method to verify if the model is loaded.
+  2. If valid: Iterates through the model's layers and prints key structural information (e.g., Layer Name, Input/Output Shape, Number of Parameters).
+  3. If invalid: Prints an error message.
+  > Output Message (No Model): "Error: No model loaded. Use LoadModel first."
+  > Output Message (Example): `"[Layer Index]
+  
+  3.4 Partition Model (PartitionModel)
+  This method splits the managed model into two sequential blocks (Block 1 and Block 2) using a specified layer index as the cut point.
+  - Input: Cut Index (cut_index: Integer)
+  - OutputTuple: (Block 1, Block 2) ((block1, block2): Tuple of Model Blocks)
+  - Operation
+  1. Calls the CheckModel (3.2) method to verify if the model is loaded.
+  2. Create Block 1: Groups layers from the start up to the layer before the cut_index.
+  3. Create Block 2: Groups layers starting from the layer at the cut_index up to the end of the model.
+  4. Returns the resulting tuple (block1, block2).
+  5. Error Handling (Invalid Index): If the index is invalid, raise a standard exception (e.g., IndexError) and output a message.
+  > Output Message (Error): "Partitioning failed: Invalid cut index or no model loaded.
+
+

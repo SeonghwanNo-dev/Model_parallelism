@@ -1,0 +1,26 @@
+System Overview and Scope
+
+- Defines the big picture of the project
+- System goal
+- Constraints
+
+# v1: Vanilla version
+(1) Defines the big picture of the project
+ The overarching goal of this project is to successfully execute a Big Model (e.g., LLM) in a restricted environment, specifically a typical commodity desktop environment. 
+ To achieve this, we will utilize "Model Parallelism" as the core methodology. This approach allows us to partition the model and distribute its substantial memory requirements across multiple nodes, overcoming the limitations of single-device GPU memory.
+(2) System goal
+- Goal: Enable a Big Model to run effectively in a resource-constrained environment, such as a desktop PC setup.
+- Methodology: Implement Model Parallelism to split the model structure and distribute the computation and memory footprint across the available network of nodes.
+(3) Constraints
+C1: Node Count	
+- The number of computation nodes is limited to 2.	
+- Initial limit for foundational testing.
+C2: GPU Memory	
+- The usable GPU memory per node is limited to 6GB.	
+- Node-specific resource ceiling.
+C3: Model Footprint	
+The total size of the model (Weights, Optimizer States, Gradients) is limited to 12GB.
+Requires distribution across both nodes.
+
+
+
