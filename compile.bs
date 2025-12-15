@@ -1,0 +1,19 @@
+SOURCE_FILE="temp.cpp"
+COMPILER="g++"
+OUTPUT_EXEC="a.out"
+
+echo "--- 1. 컴파일 시작: $SOURCE_FILE ---"
+$COMPILER $SOURCE_FILE -o $OUTPUT_EXEC -Wall
+if [ $? -eq 0 ]; then
+    echo "--- 컴파일 성공 ---"
+else
+    # 이 경로는 set -e가 없거나 $?를 수동으로 체크할 때 사용됨
+    echo "--- 컴파일 실패 ---"
+    exit 1
+fi
+
+echo "--- 2. 실행 시작: ./$OUTPUT_EXEC ---"
+./$OUTPUT_EXEC
+
+echo ""
+echo "--- 실행 완료 ---"
