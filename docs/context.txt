@@ -22,6 +22,5 @@ C3: Model Footprint
 The total size of the model (Weights, Optimizer States, Gradients) is limited to 12GB.
 Requires distribution across both nodes.
 C4: Inference Only
-Implement the forward pass for the C4 module. 
 Backward will be added soon.
 
