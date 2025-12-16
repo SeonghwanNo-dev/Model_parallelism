@@ -48,7 +48,7 @@ The network address (IP and port number) of the currently connected node.
   - Input: Data to Transmit (data: Data Type) <- 파이토치에서 정의된 형식, 아마 데이터 로더 관련돼있을거임
   - Output: None
   - Operation
-  1. Calls the CheckModel (3.2) method to verify if the current connected_node is valid.
+  1. Calls the CheckConnection (3.2) method to verify if the current connected_node is valid.
   2. Transmits the data to the connected node.
   3. Upon Data Transmission Completion, the following message is printed.
   > Output Message (Completion): "Data transmission complete."
