@@ -5,3 +5,4 @@ Manual
 - operation/maintenance manuals.
 
 1. To compile, use "compile.bs" in the root directory and simply modify the SOURCE_FILE variable.
+2. Use  "Github Flow"
