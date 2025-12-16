@@ -89,7 +89,7 @@ void IPC::ConnectNode(string target_address){
     struct sockaddr_in target_node_addr;
     memset(&target_node_addr, 0, sizeof(target_node_addr)); // Initialize memory
     target_node_addr.sin_family = AF_INET;                 // IPv4
-    target_node_addr.sin_addr.s_addr = inet_addr(stoi(ip)); // Target Node IP
+    target_node_addr.sin_addr.s_addr = inet_addr(ip); // Target Node IP
     target_node_addr.sin_port = htons(stoi(port));         // Target Node Port
     // 3. Attempt to establish a network connection to the target node
     if (connect(sock, (struct sockaddr*)&target_node_addr, sizeof(target_node_addr)) == -1) {
