@@ -15,10 +15,8 @@ Detailed Design Documents
  This document defines the design and specifications for the Inter-Process Communication (IPC) component within the system. The IPC component aims to manage stable connections with other processes (nodes) and provide functionality for sending and receiving data between connected nodes.
  
 2. IPC Component Properties
-- connected_node, type: Object (e.g., IPCNode)
-The currently connected node object. Indicates the connection status.
-- connected_node_address, type: String (e.g., IP:Port)
-The network address (IP and port number) of the currently connected node.
+- connected_node_socket, type: int (Socket Number)
+- connected_node_address, type: string ("xxxx.xxxx.xxxx.xxxx:xxx")
 
 3. Method Specifications
   3.1 Node Connection (ConnectNode)
@@ -26,11 +24,12 @@ The network address (IP and port number) of the currently connected node.
   - Input: Target Node Address (target_address: String)
   - Output: None
   - Operation
-  1. An attempt is made to establish a network connection to the node specified by target_address.
-  2. On Failure: The properties are not updated, and the following message is printed:> Output Message (Failure): "Connection fail".
-  3. On Success: The connected_node and connected_node_address properties are updated, and the following message is printed.
+  1. IPC address parsing and validation
+  2. An attempt is made to establish a network connection to the node specified by target_address.
+  3. On Failure: The properties are not updated, and the following message is printed:> Output Message (Failure): "Connection fail".
+  4. On Success: The connected_node and connected_node_address properties are updated, and the following message is printed.
   > Output Message (Success): "Connection success, Connected Node is xxxx.xxxx.xxxx.xxxx:xxx"
-  4. A new process is created on both nodes and is set to run continuously in the background.
+  5. A new process is created on both nodes and is set to run continuously in the background.
   
   3.2 Check Current Connection (CheckConnection)
   This function checks and outputs the information of the node currently connected to the IPC component.
