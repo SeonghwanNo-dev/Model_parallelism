@@ -15,9 +15,9 @@ Detailed Design Documents
  This document defines the design and specifications for the Inter-Process Communication (IPC) component within the system. The IPC component aims to manage stable connections with other processes (nodes) and provide functionality for sending and receiving data between connected nodes.
  
 2. IPC Component Properties
-- connected_nodeNode, type: Object (e.g., IPCNode)
+- connected_node, type: Object (e.g., IPCNode)
 The currently connected node object. Indicates the connection status.
-- connected_node_addressString (e.g., IP:Port)
+- connected_node_address, type: String (e.g., IP:Port)
 The network address (IP and port number) of the currently connected node.
 
 3. Method Specifications
@@ -27,16 +27,17 @@ The network address (IP and port number) of the currently connected node.
   - Output: None
   - Operation
   1. An attempt is made to establish a network connection to the node specified by target_address.
-  2. On Success: The connected_node and connected_node_address properties are updated, and the following message is printed.
+  2. On Failure: The properties are not updated, and the following message is printed:> Output Message (Failure): "Connection fail".
+  3. On Success: The connected_node and connected_node_address properties are updated, and the following message is printed.
   > Output Message (Success): "Connection success, Connected Node is xxxx.xxxx.xxxx.xxxx:xxx"
-  3. On Failure: The properties are not updated, and the following message is printed:> Output Message (Failure): "Connection fail"
+  4. A new process is created on both nodes and is set to run continuously in the background.
   
   3.2 Check Current Connection (CheckConnection)
   This function checks and outputs the information of the node currently connected to the IPC component.
   - Input: None
   - Output: None
   - Operation
-  1. The values of the connected_node and connected_node_address properties are checked.
+  1. The values of the connected_node and connected_node_address properties are checked by exchanging messages.
   2. If a node is connected: The connected node object information and address are printed.
   > Output Message (Connected): "Current connected node: [connected_node_object], Address: [connected_node_address]"
   3. If no node is connected: A no connection status message is printed.
@@ -47,12 +48,22 @@ The network address (IP and port number) of the currently connected node.
   - Input: Data to Transmit (data: Data Type) <- 파이토치에서 정의된 형식, 아마 데이터 로더 관련돼있을거임
   - Output: None
   - Operation
-  1. Confirms that the current connected_node is valid.
+  1. Calls the CheckModel (3.2) method to verify if the current connected_node is valid.
   2. Transmits the data to the connected node.
   3. Upon Data Transmission Completion, the following message is printed.
   > Output Message (Completion): "Data transmission complete."
   4. Upon Transmission Failure (e.g., connection loss), a failure message is printed.
   > Output Message (Failure): "Data transmission failed. Connection may be lost."
+  
+  3.4 Node Disconnection (DisconnectNode)
+  This function attempts to DisconnectNode method for gracefully terminating the IPC connection between the IPC component and the currently connected node.
+  - Input: None
+  - Output: None
+  - Operation
+  1. Terminate the process on the remote peer node.
+  2. Terminate the process on the local node.
+  3. Clear the connected_node and connected_node_address properties.
+  
 
 # 2. Model Partitioning Component Design Document (py)
 
