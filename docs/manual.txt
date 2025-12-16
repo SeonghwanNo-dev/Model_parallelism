@@ -4,4 +4,4 @@ Manual
 - deployment guides
 - operation/maintenance manuals.
 
-
+1. To compile, use the Makefile in the root directory and simply modify the SOURCE_FILE variable.
