@@ -13,6 +13,9 @@ private:
     int connected_node_socket;
     string connected_node_address;
 public:
+    void Listening();
+    void StopListening();
+    
     void ConnectNode(string target_address);
     // void CheckConnection();
     // void TransmitData(pyt_data data);

@@ -15,10 +15,36 @@ Detailed Design Documents
  This document defines the design and specifications for the Inter-Process Communication (IPC) component within the system. The IPC component aims to manage stable connections with other processes (nodes) and provide functionality for sending and receiving data between connected nodes.
  
 2. IPC Component Properties
+- pid, type: int
 - connected_node_socket, type: int (Socket Number)
 - connected_node_address, type: string ("xxxx.xxxx.xxxx.xxxx:xxx")
 
 3. Method Specifications
+  3.1 Listening (Listening)
+  This function ensures a dedicated listening process is running and sets its state to active.
+  - Input: None
+  - Output: None
+  - Operation
+  1. Verify if a listener process has already been spawned by checking the pid property.
+  2. If the process does not exist, invoke fork() to create a new dedicated listener process.
+  3. If the process exists, 
+     - Access to the existing process.
+     - Update the pid property with the current child process ID.
+  4. Set the process's listen_activation flag to 1 to signal the process to start monitoring network access attempts.
+  5. Bind the process to the designated port and initiate the passive listening loop.
+  6. Log the node's current state as ACTIVE for system-wide state management.
+
+  3.2 Stop Listineing (StopListineing)
+  This function transitions the active listening process into an idle state without terminating it.
+  - Input: None
+  - Output: None
+  - Operation
+  1. Validate the existence of a running listener process via the pid property.
+  2. Access to the process by the PID.
+  3. Update the listen_activation flag to 0
+  4. Upon detecting the flag change, the listener process enters a idle state, ceasing all network monitoring and data processing.
+  5. Log the node's current state as IDLE for system-wide state management.
+
   3.1 Node Connection (ConnectNode)
   This function attempts to establish a network connection between the IPC component and a target node.
   - Input: Target Node Address (target_address: String)
